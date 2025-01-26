@@ -896,6 +896,7 @@ class EngineArgs:
             "CPU offload space must be non-negative"
             f", but got {self.cpu_offload_gb}")
 
+        self.device = "npu"
         device_config = DeviceConfig(device=self.device)
         model_config = self.create_model_config()
 

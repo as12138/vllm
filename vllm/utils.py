@@ -342,6 +342,14 @@ def is_neuron() -> bool:
         transformers_neuronx = None
     return transformers_neuronx is not None
 
+@lru_cache(maxsize=None)
+def is_npu() -> bool:
+    try:
+        import torch_npu
+    except ImportError:
+        return False
+    return True
+
 
 @lru_cache(maxsize=None)
 def is_xpu() -> bool:
@@ -796,6 +804,10 @@ class DeviceMemoryProfiler:
         elif is_xpu():
             torch.xpu.reset_peak_memory_stats(self.device)  # type: ignore
             mem = torch.xpu.max_memory_allocated(self.device)  # type: ignore
+        elif is_npu():
+            import torch_npu
+            torch_npu.npu.reset_peak_memory_stats(self.device)
+            mem = torch_npu.npu.max_memory_allocated(self.device)
         return mem
 
     def __enter__(self):

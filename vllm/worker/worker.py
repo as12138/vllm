@@ -271,6 +271,7 @@ class Worker(LocalOrDistributedWorkerBase):
         self._warm_up_model()
 
     def _init_cache_engine(self):
+        self.cache_config.num_gpu_blocks = 1
         assert self.cache_config.num_gpu_blocks is not None
         self.cache_engine = [
             CacheEngine(self.cache_config, self.model_config,
